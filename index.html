@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Search</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Student Search</h1>
+    </header>
+    <div class="container">
+        <form id="searchForm">
+            <label for="searchCategory">Search By:</label>
+            <select id="searchCategory" onchange="handleCategoryChange()">
+                <option value="Name">Name</option>
+                <option value="RoomNo">Room Number</option>
+                <option value="Branch">Branch</option>
+            </select>
+
+            <div id="branchInputContainer" style="display: none;">
+                <label for="branchInput">Branch:</label>
+                <input type="text" id="branchInput">
+                <label for="classTypeSelect">Class:</label>
+                <select id="classTypeSelect">
+                    <option value="both">Both</option>
+                    <option value="btech">BTech</option>
+                    <option value="idd">IDD</option>
+                </select>
+            </div>
+
+            <div id="searchInputContainer" style="display: block;">
+                <label for="searchInput">Search:</label>
+                <input type="text" id="searchInput">
+            </div>
+
+            <input type="button" value="Search" onclick="searchStudents()">
+        </form>
+
+        <ul id="results"></ul>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
