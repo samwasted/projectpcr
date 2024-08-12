@@ -12,11 +12,12 @@ function handleCategoryChange() {
 
 function searchStudents() {
     const searchCategory = document.getElementById('searchCategory').value;
-    let searchValue;
+    let searchValue = '';
     let classValue = '';
 
+    // If Branch is selected, we will be searching for "Mathematical Sciences"
     if (searchCategory === 'Branch') {
-        searchValue = document.getElementById('branchInput').value.toLowerCase();
+        searchValue = 'mathematical sciences';
         classValue = document.getElementById('classTypeSelect').value.toLowerCase();
     } else {
         searchValue = document.getElementById('searchInput').value.toLowerCase();
@@ -39,7 +40,7 @@ function searchStudents() {
                 if (searchCategory === 'Branch') {
                     const branchValue = student[searchCategory]?.toLowerCase() || '';
                     const studentClassValue = student['Class']?.toLowerCase() || '';
-                    if (branchValue.startsWith(searchValue) && (classValue === 'both' || studentClassValue === classValue)) {
+                    if (branchValue === searchValue && (classValue === 'both' || studentClassValue === classValue)) {
                         appendStudentToResults(student, resultsContainer);
                     }
                 } else {
@@ -57,15 +58,10 @@ function searchStudents() {
 }
 
 function appendStudentToResults(student, container) {
-    const gender = student.Gender?.toLowerCase();
-    let genderEmoji = '';
-    if (gender === 'nar') {
-        genderEmoji = '👨'; // Male emoji
-    } else if (gender === 'mada') {
-        genderEmoji = '👩'; // Female emoji
-    }
+    const nameParts = student.Name.split(' ').map(name => name.toLowerCase());
+    const email = `${nameParts.join('.')}.mat24@itbhu.ac.in`;
 
     const li = document.createElement('li');
-    li.textContent = `Name: ${student.Name} ${genderEmoji}, Room No: ${student.RoomNo}, Branch: ${student.Branch}, Class: ${student.Class}`;
+    li.textContent = `Email: ${email}, Branch: ${student.Branch}, Class: ${student.Class}`;
     container.appendChild(li);
 }
