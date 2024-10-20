@@ -22,6 +22,18 @@ function searchStudents() {
         searchValue = document.getElementById('searchInput').value.toLowerCase();
     }
 
+    // Abbreviation mapping for branches
+    const branchMapping = {
+        'mnc': 'mathematics and computing',
+        'cse': 'computer science and engineering',
+        'ep': 'physics'
+    };
+
+    // If the search is for a branch, map abbreviations to full names
+    if (searchCategory === 'Branch' && branchMapping[searchValue]) {
+        searchValue = branchMapping[searchValue];
+    }
+
     const resultsContainer = document.getElementById('results');
     resultsContainer.innerHTML = ''; // Clear previous results
 
@@ -35,7 +47,6 @@ function searchStudents() {
         .then(data => {
             const students = data.Data;
             students.forEach(student => {
-                let valueToSearch;
                 if (searchCategory === 'Branch') {
                     const branchValue = student[searchCategory]?.toLowerCase() || '';
                     const studentClassValue = student['Class']?.toLowerCase() || '';
@@ -43,8 +54,15 @@ function searchStudents() {
                         appendStudentToResults(student, resultsContainer);
                     }
                 } else {
-                    valueToSearch = student[searchCategory]?.toLowerCase() || '';
-                    if (valueToSearch.startsWith(searchValue)) {
+                    const valueToSearch = student[searchCategory]?.toLowerCase() || '';
+                    if (searchCategory === 'Name') {
+                        // Split the name into words and check if any of them start with the search value
+                        const nameWords = valueToSearch.split(' ');
+                        const matches = nameWords.some(word => word.startsWith(searchValue));
+                        if (matches) {
+                            appendStudentToResults(student, resultsContainer);
+                        }
+                    } else if (valueToSearch.startsWith(searchValue)) {
                         appendStudentToResults(student, resultsContainer);
                     }
                 }
@@ -66,6 +84,11 @@ function appendStudentToResults(student, container) {
     }
 
     const li = document.createElement('li');
-    li.textContent = `Name: ${student.Name} ${genderEmoji}, Room No: ${student.RoomNo}, Branch: ${student.Branch}, Class: ${student.Class}`;
+    let textContent = `Name: ${student.Name} ${genderEmoji}, Room No: ${student.RoomNo}, Branch: ${student.Branch}, Class: ${student.Class}`;
+
+    // Adding the additional columns if they are not zero
+    
+
+    li.textContent = textContent;
     container.appendChild(li);
 }
